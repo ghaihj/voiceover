@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+@keyframes soundWave {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(2); }
+}
+
+.animate-sound-wave {
+  animation: soundWave 0.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+
+/* app/globals.css - أضف هذه الأنيميشينات */
+
+/* أنيميشن للبطاقات الذهبية - نبض ذهبي */
+@keyframes goldPulse {
+  0%, 100% {
+    background: radial-gradient(circle at 30% 50%, rgba(255, 215, 0, 0.2), transparent 70%);
+    transform: scale(1);
+  }
+  25% {
+    background: radial-gradient(circle at 50% 30%, rgba(255, 215, 0, 0.3), transparent 70%);
+  }
+  50% {
+    background: radial-gradient(circle at 70% 50%, rgba(255, 215, 0, 0.4), transparent 70%);
+    transform: scale(1.02);
+  }
+  75% {
+    background: radial-gradient(circle at 50% 70%, rgba(255, 215, 0, 0.3), transparent 70%);
+  }
+}
+
+.animate-gold-pulse {
+  animation: goldPulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* أنيميشن للبطاقات البيضاء - لمعان متحرك */
+@keyframes whiteShine {
+  0% {
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%) rotate(45deg);
+  }
+  20%, 100% {
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(200%) rotate(45deg);
+  }
+}
+
+.animate-white-shine {
+  animation: whiteShine 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* أنيميشن للبطاقات السوداء - موجات سوداء */
+@keyframes blackWave {
+  0%, 100% {
+    background: radial-gradient(circle at 20% 50%, rgba(0, 0, 0, 0.3), transparent 50%);
+    opacity: 0.3;
+  }
+  33% {
+    background: radial-gradient(circle at 50% 30%, rgba(0, 0, 0, 0.4), transparent 50%);
+    opacity: 0.4;
+  }
+  66% {
+    background: radial-gradient(circle at 80% 70%, rgba(0, 0, 0, 0.3), transparent 50%);
+    opacity: 0.3;
+  }
+}
+
+.animate-black-wave {
+  animation: blackWave 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* أنيميشن إضافي للتحويم */
+@keyframes cardGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  }
+}
+
+.group:hover .bg-gradient-to-br {
+  animation: cardGlow 2s ease-in-out infinite;
+}
+
+/* تحسين أداء الأنيميشن */
+@media (prefers-reduced-motion: reduce) {
+  .animate-gold-pulse,
+  .animate-white-shine,
+  .animate-black-wave {
+    animation: none;
+  }
+}
+
+
+
+/* app/globals.css - أضف هذه الأنيميشينات */
+@keyframes waveSlide {
+  0% {
+    transform: translateX(-100%) rotate(2deg);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(100%) rotate(2deg);
+    opacity: 0.3;
+  }
+}
+
+@keyframes goldPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-gold-pulse {
+  animation: goldPulse 2s ease-in-out infinite;
+}
+
+/* تخصيص scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* تأثيرات للتركيز على الحقول */
+input:focus, select:focus, textarea:focus {
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+}
