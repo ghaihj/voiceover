@@ -17,7 +17,7 @@ interface Project {
 
 export default function AdminProjectsPage() {
   const router = useRouter();
-  const { user, role } = useAuth();
+  const { user, role, token } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export default function AdminProjectsPage() {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
-  const token = localStorage.getItem("token");
+
   // التحقق من الصلاحيات
   useEffect(() => {
     if (!user && role !== "admin") {

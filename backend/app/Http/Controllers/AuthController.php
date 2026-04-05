@@ -62,8 +62,7 @@ class AuthController extends Controller
 
     public function users()
     {
-        $users = User::with('orders')->get();
-
+        $users = User::with('orders')->where('role', 'user')->get();
         return response()->json(['data' => $users], 200);
     }
 

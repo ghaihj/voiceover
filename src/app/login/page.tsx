@@ -18,9 +18,9 @@ export default function LoginPage() {
 
   const router = useRouter();
 
-  const { login } = useAuth();
+  const { login, user } = useAuth();
 
-  if (localStorage.getItem("token")) {
+  if (user) {
     router.push("/");
   }
 

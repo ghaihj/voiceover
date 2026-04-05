@@ -9,9 +9,8 @@ export default function EditDemoPage() {
   const router = useRouter();
   const params = useParams();
   const { id } = params;
-  const token = localStorage.getItem("token");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { user, role } = useAuth();
+  const { user, role, token } = useAuth();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);

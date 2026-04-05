@@ -7,8 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function NewDemoPage() {
   const router = useRouter();
-  const { token } = localStorage.getItem("token");
-  const { user, role } = useAuth();
+  const { user, role, token } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);

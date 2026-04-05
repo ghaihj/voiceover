@@ -29,7 +29,7 @@ export default function OrdersList() {
   const [updatingStatus, setUpdatingStatus] = useState<number | null>(null);
 
   const router = useRouter();
-  const { user, role } = useAuth();
+  const { user, role, token } = useAuth();
   useEffect(() => {
     if (!user && role !== "admin") {
       router.push("/login");
@@ -42,7 +42,7 @@ export default function OrdersList() {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
+
       const response = await fetch(`${BASE_URL}/orders`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -61,7 +61,6 @@ export default function OrdersList() {
   const handleDelete = async (id: number) => {
     if (confirm("هل أنت متأكد من حذف هذا الطلب؟")) {
       try {
-        const token = localStorage.getItem("token");
         await fetch(`${BASE_URL}/orders/${id}`, {
           method: "DELETE",
           headers: {
@@ -79,7 +78,6 @@ export default function OrdersList() {
   const handleStatusUpdate = async (id: number, status: string) => {
     try {
       setUpdatingStatus(id);
-      const token = localStorage.getItem("token");
 
       const response = await fetch(`${BASE_URL}/orders/${id}`, {
         method: "POST",

@@ -28,8 +28,7 @@ export default function AdminDashboard() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user, logout, role } = useAuth();
-  const token = localStorage.getItem("token");
+  const { user, logout, role, token } = useAuth();
 
   // التحقق من الصلاحيات
   useEffect(() => {

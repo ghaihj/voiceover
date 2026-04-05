@@ -18,8 +18,7 @@ interface ContactMessage {
 
 export default function ContactMessagesPage() {
   const router = useRouter();
-  const { role } = useAuth();
-  const token = localStorage.getItem("token");
+  const { role, token } = useAuth();
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

@@ -15,13 +15,13 @@ export default function RegisterPage() {
     password: "",
   });
 
-  const { register } = useAuth();
+  const { register, user } = useAuth();
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (user) {
       router.push("/");
     }
   }, []);

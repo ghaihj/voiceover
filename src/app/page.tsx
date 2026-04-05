@@ -58,19 +58,6 @@ export default function Home() {
       <Header />
 
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        {/* Background Video */}
-        <video
-          autoPlay
-          loop
-          controls
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
-        >
-          <source src="/video_2026-03-09_17-22-18.mp4" type="video/mp4" />
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-900 to-black"></div>
-        </video>
-
         {/* Overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-60"></div>
 

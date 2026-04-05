@@ -1,0 +1,137 @@
+# public/robots.txt
+
+# قواعد عامة لجميع محركات البحث
+User-agent: *
+Allow: /
+
+# منع الوصول إلى المجلدات الإدارية والخاصة
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /uploads/temp/
+Disallow: /drafts/
+
+# منع الوصول إلى ملفات التكوين
+Disallow: /*.json$
+Disallow: /*.env$
+Disallow: /*.config$
+
+# منع الوصول إلى مجلدات الأصول غير المهمة SEO
+Disallow: /assets/css/
+Disallow: /assets/js/
+Disallow: /assets/fonts/
+
+# منع الوصول إلى صفحات التسجيل والدخول
+Disallow: /login/
+Disallow: /register/
+Disallow: /logout/
+Disallow: /forgot-password/
+Disallow: /reset-password/
+
+# منع الوصول إلى صفحات المستخدم
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /account/
+Disallow: /orders/
+
+# منع الوصول إلى صفحات المعاينة والتجريبية
+Disallow: /preview/
+Disallow: /demo/
+Disallow: /test/
+Disallow: /sandbox/
+
+# منع الوصول إلى صفحات البحث والفلترة
+Disallow: /*?*
+Disallow: /*&*
+Disallow: /search/
+Disallow: /filter/
+
+# منع الوصول إلى الصفحات المؤقتة
+Disallow: /temp/
+Disallow: /tmp/
+Disallow: /cache/
+
+# منع الوصول إلى ملفات النسخ الاحتياطي
+Disallow: /*.bak$
+Disallow: /*.backup$
+Disallow: /*.old$
+
+# خريطة الموقع (Sitemap)
+Sitemap: https://sawti.com/sitemap.xml
+
+# وقت إعادة الزحف (كل 7 أيام)
+Crawl-delay: 5
+
+# إعدادات خاصة بـ Google
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login/
+Disallow: /register/
+Crawl-delay: 2
+
+# إعدادات خاصة بـ Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Crawl-delay: 3
+
+# إعدادات خاصة بـ Yandex
+User-agent: YandexBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Crawl-delay: 3
+
+# إعدادات خاصة بـ Baidu
+User-agent: Baiduspider
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Crawl-delay: 5
+
+# منع زواحف سيئة
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: rogerbot
+Disallow: /
+
+User-agent: Exabot
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /admin/
+
+# السماح بالوصول إلى الصفحات الرئيسية
+Allow: /$
+Allow: /about$
+Allow: /contact$
+Allow: /services$
+Allow: /portfolio$
+Allow: /demos$
+Allow: /pricing$
+Allow: /blog$
+Allow: /faq$
+
+# السماح بالوصول إلى ملفات الوسائط
+Allow: /images/
+Allow: /uploads/demos/
+Allow: /uploads/thumbnails/
+
+# تعيين المضيف الرئيسي
+Host: https://sawti.com
+
+# إضافة Clean-Param للصفحات المكررة
+Clean-Param: utm_source&utm_medium&utm_campaign&utm_term&utm_content

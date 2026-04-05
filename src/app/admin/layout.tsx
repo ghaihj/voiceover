@@ -29,7 +29,7 @@ export default function AdminLayout({
 
         const response = await fetch(`${BASE_URL}/admin/profile`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
 

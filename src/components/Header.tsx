@@ -74,7 +74,7 @@ export default function Header() {
             </nav>
 
             {/* Desktop Buttons */}
-            {!localStorage.getItem("token") ? (
+            {!user ? (
               <div className="hidden md:flex items-center gap-3">
                 <Link
                   href="/login"
@@ -173,7 +173,7 @@ export default function Header() {
                 {/* أزرار الدخول والتسجيل / تسجيل الخروج */}
                 <div className="bg-gray-900 rounded-2xl border border-gray-800 p-4">
                   <div className="flex flex-col gap-3">
-                    {!localStorage.getItem("token") ? (
+                    {!user ? (
                       <>
                         <Link
                           href="/login"

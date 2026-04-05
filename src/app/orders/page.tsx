@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { BASE_URL } from "@/config";
 import Header from "@/components/Header";
 import { Waveform } from "@/components/Waveform";
+import { useAuth } from "@/context/AuthContext";
 
 export default function OrderPage() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function OrderPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const token = localStorage.getItem("token");
+  const { user, token } = useAuth();
 
   const [formData, setFormData] = useState({
     full_name: "",
@@ -23,7 +24,7 @@ export default function OrderPage() {
   });
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!user) {
       router.push("/login");
     }
   }, []);

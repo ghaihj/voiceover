@@ -28,7 +28,7 @@ interface Order {
 
 export default function ClientsPage() {
   const router = useRouter();
-  const { user, role, token } = useAuth();
+  const { role, token } = useAuth();
   const [clients, setClients] = useState<Client[]>([]);
   const [allOrders, setAllOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,12 +44,12 @@ export default function ClientsPage() {
 
   // التحقق من الصلاحيات
   useEffect(() => {
-    if (!user || role !== "admin") {
+    if (role !== "admin") {
       router.push("/login");
       return;
     }
     fetchData();
-  }, [user, role, router]);
+  }, [role, router]);
 
   const fetchData = async () => {
     try {

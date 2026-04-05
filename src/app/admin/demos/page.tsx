@@ -2,7 +2,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { VoiceDemoCard } from "@/components/VoiceDemoCard";
-import { ASSETS_URL, BASE_URL } from "@/config";
+import { BASE_URL } from "@/config";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
@@ -32,7 +32,7 @@ export default function DemosPage() {
   // التحقق من صلاحيات المشرف
   const [isAdmin, setIsAdmin] = useState(true);
 
-  const { user, role } = useAuth();
+  const { user, role, token } = useAuth();
   useEffect(() => {
     if (!user && role !== "admin") {
       router.push("/login");
@@ -51,7 +51,7 @@ export default function DemosPage() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: "Bearer " + token,
         },
       });
       const data = await response.json();
@@ -71,7 +71,7 @@ export default function DemosPage() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: "Bearer " + token,
         },
       });
 
@@ -238,8 +238,8 @@ export default function DemosPage() {
                   title={demo.title}
                   category={demo.category}
                   duration={demo.duration}
-                  icon={getIconByCategory(demo.category)}
-                  gradient={getGradientByCategory(demo.category)}
+                  // icon={getIconByCategory(demo.category)}
+                  // gradient={getGradientByCategory(demo.category)}
                   audio={demo.audio}
                 />
 

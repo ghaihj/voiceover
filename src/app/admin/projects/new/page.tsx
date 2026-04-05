@@ -7,10 +7,9 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function NewProjectPage() {
   const router = useRouter();
-  const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { user, role } = useAuth();
+  const { user, role, token } = useAuth();
 
   const [formData, setFormData] = useState({
     title: "",

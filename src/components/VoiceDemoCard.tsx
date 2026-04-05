@@ -7,6 +7,8 @@ import { useState, useRef, useEffect, MouseEvent } from "react";
 interface VoiceDemoCardProps {
   title: string;
   category: string;
+  // icon: string;
+  // gradient: string;
   duration: string;
   audio: string;
 }

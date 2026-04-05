@@ -1,69 +1,103 @@
+// context/AuthContext.tsx
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { BASE_URL } from "@/config";
 import { useRouter } from "next/navigation";
 
-export const AuthContext = createContext({});
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string;
+  role: "admin" | "user";
+  created_at?: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  token: string | null;
+  role: "admin" | "user" | null;
+  login: (userData: { email: string; password: string }) => Promise<void>;
+  register: (userData: {
+    name: string;
+    email: string;
+    password: string;
+    phone?: string;
+  }) => Promise<void>;
+  logout: () => Promise<void>;
+  isLoading: boolean;
+}
+
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 
 export const AuthProvider = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const [user, setUser] = useState({});
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const [role, setRole] = useState();
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [role, setRole] = useState<"admin" | "user" | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    try {
-      const fetchUser = async () => {
-        const req = await fetch(BASE_URL + "/me", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        });
-        const res = await req.json();
-        setUser(res.data);
-        setToken(res.token);
-        setRole(res.data.role);
-      };
+    const initAuth = async () => {
+      const storedToken = localStorage.getItem("token");
 
-      fetchUser();
-    } catch (e) {
-      console.log(e);
-    }
+      if (storedToken) {
+        setToken(storedToken);
+        await fetchUser(storedToken);
+      } else {
+        setIsLoading(false);
+      }
+    };
+
+    initAuth();
   }, []);
 
-  const register = async (userData: Object) => {
+  const fetchUser = async (authToken: string) => {
     try {
-      const response = await fetch(BASE_URL + "/register", {
+      const req = await fetch(`${BASE_URL}/me`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
       });
 
-      const data = await response.json();
-
-      if (data) {
-        // localStorage.setItem("user", JSON.stringify(data.data));
-        localStorage.setItem("token", data.token);
-        setUser(data.data);
-        setToken(data.token);
-        router.push("/");
+      if (req.ok) {
+        const res = await req.json();
+        setUser(res.data);
+        setRole(res.data.role);
       } else {
-        console.error("Something Went Wrong!");
+        // Token غير صالح
+        localStorage.removeItem("token");
+        setToken(null);
+        setUser(null);
+        setRole(null);
       }
-    } catch (err) {
-      console.error(err);
+    } catch (e) {
+      console.error("Error fetching user:", e);
+      localStorage.removeItem("token");
+      setToken(null);
+      setUser(null);
+      setRole(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const login = async (userData: Object) => {
+  const register = async (userData: {
+    name: string;
+    email: string;
+    password: string;
+    phone?: string;
+  }) => {
     try {
-      const response = await fetch(BASE_URL + "/login", {
+      const response = await fetch(`${BASE_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -71,41 +105,80 @@ export const AuthProvider = ({
 
       const data = await response.json();
 
-      if (data) {
-        // localStorage.setItem("user", JSON.stringify(data.data));
+      if (response.ok && data.token) {
         localStorage.setItem("token", data.token);
-        setUser(data.data);
         setToken(data.token);
+        setUser(data.data);
         setRole(data.data.role);
         router.push("/");
       } else {
-        console.error("Something Went Wrong!");
+        console.error("Registration failed:", data.message);
+        throw new Error(data.message || "Registration failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
+    }
+  };
+
+  const login = async (userData: { email: string; password: string }) => {
+    try {
+      const response = await fetch(`${BASE_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.token) {
+        localStorage.setItem("token", data.token);
+        setToken(data.token);
+        setUser(data.data);
+        setRole(data.data.role);
+        router.push("/");
+      } else {
+        console.error("Login failed:", data.message);
+        throw new Error(data.message || "Login failed");
+      }
+    } catch (err) {
+      console.error(err);
+      throw err;
     }
   };
 
   const logout = async () => {
     try {
-      const response = await fetch(BASE_URL + "/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      // localStorage.removeItem("role");
-      localStorage.removeItem("token");
-      // localStorage.removeItem("user");
-      location.reload();
-      router.push("/");
+      if (token) {
+        await fetch(`${BASE_URL}/logout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Logout error:", err);
+    } finally {
+      // بغض النظر عن نتيجة الـ API، نقوم بتنظيف الـ localStorage
+      localStorage.removeItem("token");
+      setToken(null);
+      setUser(null);
+      setRole(null);
+      router.push("/login");
     }
   };
 
-  const values = { user, role, token, login, register, logout };
+  const values: AuthContextType = {
+    user,
+    token,
+    role,
+    login,
+    register,
+    logout,
+    isLoading,
+  };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
@@ -113,8 +186,8 @@ export const AuthProvider = ({
 export const useAuth = () => {
   const context = useContext(AuthContext);
 
-  if (!context) {
-    throw Error("Error Auth!");
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
 
   return context;
