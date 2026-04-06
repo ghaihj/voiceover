@@ -197,7 +197,7 @@ export default function RegisterPage() {
               </div>
               <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 text-center border border-gray-800">
                 <div className="text-yellow-500 text-3xl mb-3">🔄</div>
-                <h3 className="text-white font-bold mb-2">تعديلات مجانية</h3>
+                <h3 className="text-white font-bold mb-2">تعديلات </h3>
                 <p className="text-gray-400 text-sm">حتى ترضى تماماً</p>
               </div>
             </div>
