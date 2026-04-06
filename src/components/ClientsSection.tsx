@@ -8,20 +8,86 @@ interface Client {
   id: number;
   name: string;
   logo: string;
+  alt: string;
 }
 
 const clients: Client[] = [
   // الصف الأول - إعلام وقنوات
-  { id: 1, name: "MBC", logo: "/clients/mbc.svg" },
-  { id: 2, name: "Al Jazeera", logo: "/clients/aljazeera.svg" },
-  { id: 3, name: "Rotana", logo: "/clients/rotana.svg" },
-  { id: 4, name: "Dubai TV", logo: "/clients/dubaitv.svg" },
-  { id: 5, name: "Saudi TV", logo: "/clients/sauditv.svg" },
-  { id: 6, name: "Qatar TV", logo: "/clients/qatartv.svg" },
+  {
+    id: 1,
+    name: "UAEU",
+    logo: "/logos/United-Arab-Emirates-University-(UAEU).svg",
+    alt: "United Arab Emirates University",
+  },
+  {
+    id: 2,
+    name: "ADNOC",
+    logo: "/logos/ADNOC-.svg",
+    alt: "Al Jazeera Network",
+  },
+  {
+    id: 3,
+    name: "TOYOTA",
+    logo: "/logos/Toyota.svg",
+    alt: "Rotana Media Group",
+  },
+  {
+    id: 4,
+    name: "CITI BANK",
+    logo: "/logos/3840px-Citi.svg.png",
+    alt: "Dubai Television",
+  },
+  {
+    id: 5,
+    name: "TDRA",
+    logo: "/logos/Telecommunications-Regulatory-Authority-(TRA)-and-the-Digital-Government.svg",
+    alt: "Saudi Television",
+  },
+  {
+    id: 6,
+    name: "ASTER DM HEALTHCARE",
+    logo: "/logos/3840px-Aster_DM_Healthcare_Logo.svg.png",
+    alt: "Qatar Television",
+  },
+  {
+    id: 7,
+    name: "CHAM WINGS",
+    logo: "/logos/idMJY2hFu5_1775496763731.svg",
+    alt: "Saudi Television",
+  },
+  {
+    id: 8,
+    name: "Sharjah Broadcasting Authority",
+    logo: "/logos/Sharjah-Broadcasting-Authority.svg",
+    alt: "Saudi Television",
+  },
+  {
+    id: 9,
+    name: "Smart Dubai",
+    logo: "/logos/Smart-Dubai.svg",
+    alt: "Saudi Television",
+  },
+  {
+    id: 10,
+    name: "Government-of-Abu-Dhabi",
+    logo: "/logos/Government-of-Abu-Dhabi.svg",
+    alt: "Saudi Television",
+  },
+  {
+    id: 11,
+    name: "Abu-Dhabi-Islamic-Bank-(ADIB)",
+    logo: "/logos/Abu-Dhabi-Islamic-Bank-(ADIB).svg",
+    alt: "Saudi Television",
+  },
 ];
 
 export const ClientsSection = () => {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [imgErrors, setImgErrors] = useState<{ [key: number]: boolean }>({});
+
+  const handleImageError = (id: number) => {
+    setImgErrors((prev) => ({ ...prev, [id]: true }));
+  };
 
   // تقسيم العملاء إلى صفوف
   const rows = [];
@@ -31,18 +97,30 @@ export const ClientsSection = () => {
 
   return (
     <section className="py-20 bg-black relative overflow-hidden">
-      {/* عنوان القسم - أبيض */}
+      {/* خلفية بنمط شبكي ذهبي خفيف */}
+      <div className="absolute inset-0 opacity-5">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,215,0,0.2) 1px, transparent 0)`,
+            backgroundSize: "40px 40px",
+          }}
+        />
+      </div>
+
+      {/* عنوان القسم */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-            عملاؤنا حول العالم
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <span className="text-white">عملاؤنا </span>
+            <span className="text-yellow-500">حول العالم</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
             نفتخر بثقة كبرى الشركات والإعلاميين في 25 دولة
           </p>
         </div>
 
-        {/* إحصائيات سريعة - بيضاء مع ذهبي */}
+        {/* إحصائيات سريعة */}
         <div className="flex justify-center gap-16 mb-16">
           <div className="text-center">
             <div className="text-4xl font-bold text-yellow-500 mb-2">+300</div>
@@ -64,7 +142,7 @@ export const ClientsSection = () => {
           </div>
         </div>
 
-        {/* شبكة العملاء - بطاقات بالألوان المطلوبة */}
+        {/* شبكة العملاء */}
         <div className="space-y-6">
           {rows.map((row, rowIndex) => (
             <div
@@ -77,6 +155,8 @@ export const ClientsSection = () => {
                   client={client}
                   hoveredId={hoveredId}
                   setHoveredId={setHoveredId}
+                  hasError={imgErrors[client.id]}
+                  onImageError={() => handleImageError(client.id)}
                 />
               ))}
             </div>
@@ -90,6 +170,9 @@ export const ClientsSection = () => {
             <span className="text-gray-300">
               انضم إلى أكثر من 300 شركة تثق في خدماتنا
             </span>
+            <button className="text-yellow-500 hover:text-yellow-400 transition-colors mr-2">
+              ← عرض جميع العملاء
+            </button>
           </div>
         </div>
       </div>
@@ -97,35 +180,50 @@ export const ClientsSection = () => {
   );
 };
 
-// مكون بطاقة العميل - بالألوان المطلوبة مع أنيميشن
+// مكون بطاقة العميل
 interface ClientCardProps {
   client: Client;
   hoveredId: number | null;
   setHoveredId: (id: number | null) => void;
+  hasError: boolean;
+  onImageError: () => void;
 }
 
-const ClientCard = ({ client, hoveredId, setHoveredId }: ClientCardProps) => {
+const ClientCard = ({
+  client,
+  hoveredId,
+  setHoveredId,
+  hasError,
+  onImageError,
+}: ClientCardProps) => {
   // ألوان مختلفة للبطاقات
   const getCardStyle = (id: number) => {
     const styles = [
-      "from-yellow-400 to-yellow-600 text-black", // ذهبي
-      "from-gray-100 to-white text-black", // أبيض
-      "from-gray-900 to-black text-white", // أسود
+      "from-yellow-400 to-yellow-600", // ذهبي
+      "from-gray-100 to-white", // أبيض
+      "from-gray-900 to-black", // أسود
     ];
     return styles[id % 3];
   };
 
   const cardStyle = getCardStyle(client.id);
   const isDarkCard = client.id % 3 === 2; // البطاقة السوداء
+  const isGoldCard = client.id % 3 === 0; // البطاقة الذهبية
+  const isWhiteCard = client.id % 3 === 1; // البطاقة البيضاء
 
-  // تحديد نوع الأنيميشن بناءً على لون البطاقة
-  const getAnimation = (id: number) => {
-    const animations = [
-      "animate-gold-pulse", // للذهبي
-      "animate-white-shine", // للأبيض
-      "animate-black-wave", // للأسود
-    ];
-    return animations[id % 3];
+  // تحديد لون النص حسب لون البطاقة
+  const getTextColor = () => {
+    if (isDarkCard) return "text-white";
+    if (isGoldCard) return "text-black";
+    if (isWhiteCard) return "text-black";
+    return "text-white";
+  };
+
+  // تحديد لون الخلفية للنص المساعد
+  const getTooltipColor = () => {
+    if (isGoldCard) return "bg-yellow-500 text-black border-yellow-400";
+    if (isWhiteCard) return "bg-white text-black border-gray-300";
+    return "bg-gray-900 text-white border-gray-700";
   };
 
   return (
@@ -147,29 +245,35 @@ const ClientCard = ({ client, hoveredId, setHoveredId }: ClientCardProps) => {
           relative overflow-hidden
         `}
       >
-        {/* أنيميشن مخصص لكل بطاقة */}
-        <div className={`absolute inset-0 ${getAnimation(client.id)}`}></div>
-
-        {/* اسم الشركة */}
-        <span
-          className={`
-          relative z-10 font-bold text-lg
-          ${isDarkCard ? "text-white" : "text-black"}
-          ${hoveredId === client.id ? "opacity-100" : "opacity-90"}
-          transition-opacity
-        `}
-        >
-          {client.name}
-        </span>
+        {/* الشعار */}
+        {!hasError ? (
+          <div className="relative w-full h-full flex items-center justify-center">
+            <img
+              src={client.logo}
+              alt={client.alt}
+              className={`max-w-full max-h-full object-contain transition-all duration-300 ${
+                hoveredId === client.id ? "scale-110" : "scale-100"
+              }`}
+              onError={onImageError}
+            />
+          </div>
+        ) : (
+          // إذا فشل تحميل الصورة، عرض اسم الشركة
+          <span className={`relative z-10 font-bold text-lg ${getTextColor()}`}>
+            {client.name}
+          </span>
+        )}
       </div>
 
       {/* اسم العميل يظهر عند التحويم */}
       <div
         className={`
-          absolute -bottom-8 left-1/2 transform -translate-x-1/2
-          bg-gray-900 text-white text-sm px-3 py-1 rounded-full
-          whitespace-nowrap border border-gray-700
+          absolute -bottom-10 left-1/2 transform -translate-x-1/2
+          ${getTooltipColor()}
+          text-sm px-3 py-1.5 rounded-full
+          whitespace-nowrap border
           transition-all duration-300
+          shadow-lg
           ${
             hoveredId === client.id
               ? "opacity-100 translate-y-0"
