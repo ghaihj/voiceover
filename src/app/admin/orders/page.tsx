@@ -30,6 +30,7 @@ export default function OrdersList() {
 
   const router = useRouter();
   const { user, role, token } = useAuth();
+
   useEffect(() => {
     if (!user && role !== "admin") {
       router.push("/login");
@@ -85,18 +86,16 @@ export default function OrdersList() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ status, _method: "PATCH" }), // ✅ استخدم status الصحيح وليس filterStatus
+        body: JSON.stringify({ status, _method: "PATCH" }),
       });
 
       if (response.ok) {
-        // تحديث الطلب المحدد فقط
         setOrders(
           orders.map((order) =>
             order.id === id ? { ...order, status } : order,
           ),
         );
 
-        // إذا كان الطلب المفتوح في المودال هو نفسه الذي تم تحديثه، قم بتحديثه أيضاً
         if (selectedOrder && selectedOrder.id === id) {
           setSelectedOrder({ ...selectedOrder, status });
         }
@@ -127,10 +126,12 @@ export default function OrdersList() {
     switch (status) {
       case "completed":
         return "bg-green-500/20 text-green-500";
-      case "pending":
-        return "bg-yellow-500/20 text-yellow-500";
       case "processing":
         return "bg-blue-500/20 text-blue-500";
+      case "received":
+        return "bg-purple-500/20 text-purple-500";
+      case "pending":
+        return "bg-yellow-500/20 text-yellow-500";
       default:
         return "bg-gray-500/20 text-gray-500";
     }
@@ -140,10 +141,12 @@ export default function OrdersList() {
     switch (status) {
       case "completed":
         return "مكتمل";
-      case "pending":
-        return "قيد الانتظار";
       case "processing":
         return "قيد التنفيذ";
+      case "received":
+        return "تم استلام الطلب";
+      case "pending":
+        return "قيد الانتظار";
       default:
         return "جديد";
     }
@@ -196,6 +199,7 @@ export default function OrdersList() {
             >
               <option value="all">جميع الحالات</option>
               <option value="pending">قيد الانتظار</option>
+              <option value="received">تم استلام الطلب</option>
               <option value="processing">قيد التنفيذ</option>
               <option value="completed">مكتمل</option>
             </select>
@@ -217,14 +221,21 @@ export default function OrdersList() {
             <div className="text-sm text-gray-400">قيد الانتظار</div>
           </div>
           <div className="bg-gray-900 rounded-xl p-4 border border-gray-800">
-            <div className="text-yellow-500 text-2xl mb-2">⚡</div>
+            <div className="text-purple-500 text-2xl mb-2">📬</div>
+            <div className="text-2xl font-bold text-white">
+              {orders.filter((o) => o.status === "received").length}
+            </div>
+            <div className="text-sm text-gray-400">تم استلام الطلب</div>
+          </div>
+          <div className="bg-gray-900 rounded-xl p-4 border border-gray-800">
+            <div className="text-blue-500 text-2xl mb-2">⚡</div>
             <div className="text-2xl font-bold text-white">
               {orders.filter((o) => o.status === "processing").length}
             </div>
             <div className="text-sm text-gray-400">قيد التنفيذ</div>
           </div>
           <div className="bg-gray-900 rounded-xl p-4 border border-gray-800">
-            <div className="text-yellow-500 text-2xl mb-2">✅</div>
+            <div className="text-green-500 text-2xl mb-2">✅</div>
             <div className="text-2xl font-bold text-white">
               {orders.filter((o) => o.status === "completed").length}
             </div>
@@ -303,6 +314,7 @@ export default function OrdersList() {
                           className={`px-3 py-1 rounded-full text-sm font-medium border-none focus:outline-none ${getStatusColor(order.status)} bg-black/50 cursor-pointer`}
                         >
                           <option value="pending">قيد الانتظار</option>
+                          <option value="received">تم استلام الطلب</option>
                           <option value="processing">قيد التنفيذ</option>
                           <option value="completed">مكتمل</option>
                         </select>
@@ -409,6 +421,7 @@ export default function OrdersList() {
                       className={`mt-1 px-3 py-1 rounded-full text-sm font-medium focus:outline-none ${getStatusColor(selectedOrder.status)} bg-black/50 cursor-pointer`}
                     >
                       <option value="pending">قيد الانتظار</option>
+                      <option value="received">تم استلام الطلب</option>
                       <option value="processing">قيد التنفيذ</option>
                       <option value="completed">مكتمل</option>
                     </select>
