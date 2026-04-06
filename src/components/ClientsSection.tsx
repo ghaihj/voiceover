@@ -1,8 +1,7 @@
 // components/ClientsSection.tsx
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useState, useRef } from "react";
 
 interface Client {
   id: number;
@@ -12,7 +11,6 @@ interface Client {
 }
 
 const clients: Client[] = [
-  // الصف الأول - إعلام وقنوات
   {
     id: 1,
     name: "UAEU",
@@ -23,77 +21,86 @@ const clients: Client[] = [
     id: 2,
     name: "ADNOC",
     logo: "/logos/ADNOC-.svg",
-    alt: "Al Jazeera Network",
+    alt: "ADNOC",
   },
   {
     id: 3,
     name: "TOYOTA",
     logo: "/logos/Toyota.svg",
-    alt: "Rotana Media Group",
+    alt: "Toyota",
   },
   {
     id: 4,
     name: "CITI BANK",
     logo: "/logos/3840px-Citi.svg.png",
-    alt: "Dubai Television",
+    alt: "Citi Bank",
   },
   {
     id: 5,
     name: "TDRA",
     logo: "/logos/Telecommunications-Regulatory-Authority-(TRA)-and-the-Digital-Government.svg",
-    alt: "Saudi Television",
+    alt: "TDRA",
   },
   {
     id: 6,
     name: "ASTER DM HEALTHCARE",
     logo: "/logos/3840px-Aster_DM_Healthcare_Logo.svg.png",
-    alt: "Qatar Television",
+    alt: "Aster DM Healthcare",
   },
   {
     id: 7,
     name: "CHAM WINGS",
     logo: "/logos/idMJY2hFu5_1775496763731.svg",
-    alt: "Saudi Television",
+    alt: "Cham Wings",
   },
   {
     id: 8,
     name: "Sharjah Broadcasting Authority",
     logo: "/logos/Sharjah-Broadcasting-Authority.svg",
-    alt: "Saudi Television",
+    alt: "Sharjah Broadcasting Authority",
   },
   {
     id: 9,
     name: "Smart Dubai",
     logo: "/logos/Smart-Dubai.svg",
-    alt: "Saudi Television",
+    alt: "Smart Dubai",
   },
   {
     id: 10,
     name: "Government-of-Abu-Dhabi",
     logo: "/logos/Government-of-Abu-Dhabi.svg",
-    alt: "Saudi Television",
+    alt: "Government of Abu Dhabi",
   },
   {
     id: 11,
     name: "Abu-Dhabi-Islamic-Bank-(ADIB)",
     logo: "/logos/Abu-Dhabi-Islamic-Bank-(ADIB).svg",
-    alt: "Saudi Television",
+    alt: "Abu Dhabi Islamic Bank",
   },
 ];
 
 export const ClientsSection = () => {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [imgErrors, setImgErrors] = useState<{ [key: number]: boolean }>({});
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleImageError = (id: number) => {
     setImgErrors((prev) => ({ ...prev, [id]: true }));
   };
 
-  // تقسيم العملاء إلى صفوف
-  const rows = [];
-  for (let i = 0; i < clients.length; i += 6) {
-    rows.push(clients.slice(i, i + 6));
-  }
+  // وظيفة التمرير
+  const scroll = (direction: "left" | "right") => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 300;
+      const newScrollLeft =
+        scrollContainerRef.current.scrollLeft +
+        (direction === "left" ? -scrollAmount : scrollAmount);
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <section className="py-20 bg-black relative overflow-hidden">
@@ -142,25 +149,68 @@ export const ClientsSection = () => {
           </div>
         </div>
 
-        {/* شبكة العملاء */}
-        <div className="space-y-6">
-          {rows.map((row, rowIndex) => (
-            <div
-              key={rowIndex}
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+        {/* صف واحد مع تمرير أفقي */}
+        <div className="relative group">
+          {/* أزرار التمرير */}
+          <button
+            onClick={() => scroll("left")}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/80 hover:bg-yellow-500 text-white hover:text-black rounded-full p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-4 shadow-xl"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-6 h-6"
             >
-              {row.map((client) => (
-                <ClientCard
-                  key={client.id}
-                  client={client}
-                  hoveredId={hoveredId}
-                  setHoveredId={setHoveredId}
-                  hasError={imgErrors[client.id]}
-                  onImageError={() => handleImageError(client.id)}
-                />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={() => scroll("right")}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/80 hover:bg-yellow-500 text-white hover:text-black rounded-full p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 shadow-xl"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
+
+          {/* حاوية التمرير */}
+          <div
+            ref={scrollContainerRef}
+            className="overflow-x-auto scrollbar-hide"
+            style={{ scrollBehavior: "smooth" }}
+          >
+            <div className="flex gap-4" style={{ minWidth: "max-content" }}>
+              {clients.map((client) => (
+                <div key={client.id} className="w-48">
+                  <ClientCard
+                    client={client}
+                    hoveredId={hoveredId}
+                    setHoveredId={setHoveredId}
+                    hasError={imgErrors[client.id]}
+                    onImageError={() => handleImageError(client.id)}
+                  />
+                </div>
               ))}
             </div>
-          ))}
+          </div>
         </div>
 
         {/* دعوة للانضمام */}
@@ -180,7 +230,7 @@ export const ClientsSection = () => {
   );
 };
 
-// مكون بطاقة العميل
+// مكون بطاقة العميل - جميع البطاقات بيضاء
 interface ClientCardProps {
   client: Client;
   hoveredId: number | null;
@@ -196,36 +246,6 @@ const ClientCard = ({
   hasError,
   onImageError,
 }: ClientCardProps) => {
-  // ألوان مختلفة للبطاقات
-  const getCardStyle = (id: number) => {
-    const styles = [
-      "from-yellow-400 to-yellow-600", // ذهبي
-      "from-gray-100 to-white", // أبيض
-      "from-gray-900 to-black", // أسود
-    ];
-    return styles[id % 3];
-  };
-
-  const cardStyle = getCardStyle(client.id);
-  const isDarkCard = client.id % 3 === 2; // البطاقة السوداء
-  const isGoldCard = client.id % 3 === 0; // البطاقة الذهبية
-  const isWhiteCard = client.id % 3 === 1; // البطاقة البيضاء
-
-  // تحديد لون النص حسب لون البطاقة
-  const getTextColor = () => {
-    if (isDarkCard) return "text-white";
-    if (isGoldCard) return "text-black";
-    if (isWhiteCard) return "text-black";
-    return "text-white";
-  };
-
-  // تحديد لون الخلفية للنص المساعد
-  const getTooltipColor = () => {
-    if (isGoldCard) return "bg-yellow-500 text-black border-yellow-400";
-    if (isWhiteCard) return "bg-white text-black border-gray-300";
-    return "bg-gray-900 text-white border-gray-700";
-  };
-
   return (
     <div
       className="relative group cursor-pointer"
@@ -235,8 +255,8 @@ const ClientCard = ({
       <div
         className={`
           aspect-[3/2] rounded-xl
-          bg-gradient-to-br ${cardStyle}
-          border-2 border-transparent
+          bg-white
+          border-2 border-gray-200
           hover:border-yellow-500
           flex items-center justify-center
           p-4
@@ -251,15 +271,16 @@ const ClientCard = ({
             <img
               src={client.logo}
               alt={client.alt}
-              className={`max-w-full max-h-full object-contain transition-all duration-300 ${
-                hoveredId === client.id ? "scale-110" : "scale-100"
-              }`}
+              className={`
+                max-w-full max-h-full object-contain transition-all duration-300
+                ${hoveredId === client.id ? "scale-110" : "scale-100"}
+              `}
               onError={onImageError}
             />
           </div>
         ) : (
           // إذا فشل تحميل الصورة، عرض اسم الشركة
-          <span className={`relative z-10 font-bold text-lg ${getTextColor()}`}>
+          <span className="relative z-10 font-bold text-lg text-gray-800 text-center">
             {client.name}
           </span>
         )}
@@ -269,11 +290,12 @@ const ClientCard = ({
       <div
         className={`
           absolute -bottom-10 left-1/2 transform -translate-x-1/2
-          ${getTooltipColor()}
+          bg-yellow-500 text-black
           text-sm px-3 py-1.5 rounded-full
-          whitespace-nowrap border
+          whitespace-nowrap border border-yellow-400
           transition-all duration-300
           shadow-lg
+          z-20
           ${
             hoveredId === client.id
               ? "opacity-100 translate-y-0"
