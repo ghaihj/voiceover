@@ -59,7 +59,7 @@ export default function Header() {
                 { name: "الديمو", href: "#voice-demos" },
                 { name: "الخدمات", href: "#services" },
                 { name: "أعمالنا", href: "#portfolio" },
-                { name: "الأسعار", href: "#calculator" },
+                { name: "الأسعار", href: "#calc" },
                 { name: "عننا", href: "#about" },
                 { name: "اتصل بنا", href: "/contact" },
               ].map((item, index) => (

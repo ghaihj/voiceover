@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     password: "",
   });
 
@@ -24,7 +25,7 @@ export default function RegisterPage() {
     if (user) {
       router.push("/");
     }
-  }, []);
+  }, [user, router]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -37,7 +38,6 @@ export default function RegisterPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // هنا منطق إرسال النموذج
     register(formData);
   };
 
@@ -93,7 +93,7 @@ export default function RegisterPage() {
             {/* نموذج التسجيل */}
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-gray-800 p-8 md:p-12">
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* الاسم */}
+                {/* الاسم ورقم الهاتف */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -110,7 +110,24 @@ export default function RegisterPage() {
                     />
                   </div>
 
-                  {/* البريد الإلكتروني */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      رقم الهاتف <span className="text-yellow-500">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-yellow-500 focus:outline-none transition-colors text-white"
+                      placeholder="09xxxxxxxx"
+                    />
+                  </div>
+                </div>
+
+                {/* البريد الإلكتروني وكلمة المرور */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       البريد الإلكتروني{" "}
@@ -126,26 +143,29 @@ export default function RegisterPage() {
                       placeholder="example@domain.com"
                     />
                   </div>
-                  <div>
+
+                  <div className="relative">
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       كلمة المرور <span className="text-yellow-500">*</span>
                     </label>
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      id="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-yellow-500 focus:outline-none transition-colors text-white pr-12"
-                      placeholder="********"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute left-120 top-50 transform -translate-y-1/2 text-gray-500 hover:text-yellow-500 transition-colors"
-                    >
-                      {showPassword ? "👁️" : "👁️‍🗨️"}
-                    </button>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-yellow-500 focus:outline-none transition-colors text-white pr-12"
+                        placeholder="********"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-yellow-500 transition-colors"
+                      >
+                        {showPassword ? "👁️" : "👁️‍🗨️"}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -154,8 +174,7 @@ export default function RegisterPage() {
                   type="submit"
                   className="w-full py-4 px-6 rounded-lg font-semibold text-lg
                   transition-all transform hover:scale-105
-                    agreeTerms
-                       bg-gradient-to-r from-yellow-500 to-white text-black hover:from-yellow-400 hover:to-gray-100"
+                  bg-gradient-to-r from-yellow-500 to-white text-black hover:from-yellow-400 hover:to-gray-100"
                 >
                   انشاء حساب
                 </button>
@@ -181,6 +200,19 @@ export default function RegisterPage() {
                 <h3 className="text-white font-bold mb-2">تعديلات مجانية</h3>
                 <p className="text-gray-400 text-sm">حتى ترضى تماماً</p>
               </div>
+            </div>
+
+            {/* رابط تسجيل الدخول */}
+            <div className="text-center mt-8">
+              <p className="text-gray-400">
+                لديك حساب بالفعل؟{" "}
+                <Link
+                  href="/login"
+                  className="text-yellow-500 hover:text-yellow-400 transition-colors"
+                >
+                  تسجيل الدخول
+                </Link>
+              </p>
             </div>
           </div>
         </main>

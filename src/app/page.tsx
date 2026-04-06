@@ -221,7 +221,9 @@ export default function Home() {
       </section>
 
       <ClientsSection />
-      <PortfolioSection />
+      <div id="portfolio">
+        <PortfolioSection />
+      </div>
       <VoiceCostCalculator />
       <TestimonialsSection />
       <FinalCTA />

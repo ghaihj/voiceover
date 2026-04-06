@@ -536,15 +536,6 @@ export default function ClientsPage() {
                 <div className="mt-6 flex gap-3">
                   <button
                     onClick={() => {
-                      window.location.href = `tel:${selectedPhone}`;
-                    }}
-                    className="flex-1 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-400 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <span>📞</span>
-                    اتصال
-                  </button>
-                  <button
-                    onClick={() => {
                       let cleanPhone = selectedPhone.replace(/[^0-9]/g, "");
                       if (cleanPhone.startsWith("0")) {
                         cleanPhone = "963" + cleanPhone.substring(1);

@@ -213,7 +213,7 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="05xxxxxxxx"
+                        placeholder="05xxxxxxxx... مع كتابة رمز الدولة"
                         className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-yellow-500 focus:outline-none text-white"
                       />
                     </div>
