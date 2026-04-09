@@ -43,7 +43,22 @@ class ProjectController extends Controller
 
     public function update(Request $request, Project $project)
     {
-        //
+        $validate = $request->validate([
+            'title' => 'required|string|max:110',
+            'category' => 'required|string|max:110',
+            'thumbnail' => 'required|string',
+            'videoUrl' => 'required|string',
+        ]);
+
+        $project = Project::where('id', $project->id)->first();
+
+        if (!$project) {
+            return response()->json(['message' => 'Project Not Found!'], 404);
+        }
+
+        $project->update($validate);
+
+        return response()->json(['message' => 'Done Updated.'], 200);
     }
 
     public function destroy(Project $project)
