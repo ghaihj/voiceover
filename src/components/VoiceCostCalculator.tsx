@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Waveform } from "./Waveform";
+import Link from "next/link";
 
 interface ProjectType {
   id: string;
@@ -321,7 +322,8 @@ export const VoiceCostCalculator = () => {
                     </div>
 
                     {/* زر طلب الخدمة */}
-                    <button
+                    <Link
+                      href={"/orders"}
                       className="w-full py-3 px-6 rounded-lg font-semibold
                       bg-transparent border-2 border-yellow-500 text-yellow-500
                       hover:bg-yellow-500 hover:text-black
@@ -330,7 +332,7 @@ export const VoiceCostCalculator = () => {
                     >
                       <span>📞</span>
                       اطلب الخدمة الآن
-                    </button>
+                    </Link>
                   </div>
                 )}
 
