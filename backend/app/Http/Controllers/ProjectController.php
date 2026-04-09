@@ -74,18 +74,6 @@ class ProjectController extends Controller
         return response()->json(['message' => 'Done Deleted.'], 200);
     }
 
-    public function uploadAudio(Request $request)
-    {
-        $file = $request->file('audio');
-
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $path = $file->move(public_path('uploads/demos'), $filename);
-
-        return response()->json([
-            'success' => true,
-            'url' => asset('uploads/demos/' . $filename),
-        ]);
-    }
 
     /**
      * رفع ملف فيديو

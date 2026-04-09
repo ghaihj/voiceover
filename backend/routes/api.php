@@ -42,7 +42,7 @@ Route::controller(ProjectController::class)->prefix('projects')->group(function 
     Route::delete('/{project}', 'destroy')->middleware('auth:sanctum');
 });
 
-Route::post('/upload/audio', [ProjectController::class, 'uploadAudio']);
+
 Route::post('/upload/video',  [ProjectController::class, 'uploadVideo'])->middleware('auth:sanctum');
 Route::post('/upload/thumbnail',  [ProjectController::class, 'uploadThumbnail'])->middleware('auth:sanctum');
 
