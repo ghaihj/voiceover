@@ -13,8 +13,8 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [adminName, setAdminName] = useState("أحمد المدير");
-  const [adminEmail, setAdminEmail] = useState("admin@sawti.com");
+  const [adminName, setAdminName] = useState("لوحة التحكم");
+  const [adminEmail, setAdminEmail] = useState("majd.alekesh@gmail.com");
   const pathname = usePathname();
   const router = useRouter();
   const { user, role } = useAuth();

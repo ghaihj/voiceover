@@ -123,7 +123,7 @@ export const FinalCTA = () => {
                 </div>
                 <div>
                   <div className="text-sm text-gray-500">واتساب</div>
-                  <div className="text-white font-bold">+971 50 123 4567</div>
+                  <div className="text-white font-bold">+380544491695</div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -132,7 +132,9 @@ export const FinalCTA = () => {
                 </div>
                 <div>
                   <div className="text-sm text-gray-500">البريد الإلكتروني</div>
-                  <div className="text-white font-bold">info@sawti.com</div>
+                  <div className="text-white font-bold">
+                    majd.alekesh@gmail.com
+                  </div>
                 </div>
               </div>
             </div>

@@ -109,6 +109,26 @@ export default function OrdersList() {
     }
   };
 
+  // دالة الرد عبر واتساب
+  const handleWhatsAppReply = (phone: string, name: string) => {
+    // تنظيف رقم الهاتف
+    let cleanPhone = phone.replace(/[^0-9]/g, "");
+    // إذا كان الرقم يبدأ بـ 0، أزل الصفر وأضف 963
+    if (cleanPhone.startsWith("0")) {
+      cleanPhone = "963" + cleanPhone.substring(1);
+    }
+    // إذا كان الرقم لا يحتوي على رمز الدولة
+    if (!cleanPhone.startsWith("963") && !cleanPhone.startsWith("00963")) {
+      cleanPhone = "963" + cleanPhone;
+    }
+
+    const message = encodeURIComponent(
+      `مرحباً ${name}،\n\nنشكرك على تواصلك مع صوتي! تم استلام طلبك وسنقوم بالرد عليك في أقرب وقت.\n\nتفاصيل طلبك:\n• الفئة: ${selectedOrder?.category || "غير محدد"}\n• النوع: ${selectedOrder?.type || "عام"}\n\nللاستفسار السريع، يمكنك التواصل معنا على هذا الرقم.\n\nتحياتنا،\nفريق صوتي`,
+    );
+    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${message}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
   const filteredOrders = orders.filter((order) => {
     const matchesSearch =
       order.full_name?.includes(searchTerm) ||
@@ -207,7 +227,7 @@ export default function OrdersList() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
           <div className="bg-gray-900 rounded-xl p-4 border border-gray-800">
             <div className="text-yellow-500 text-2xl mb-2">📋</div>
             <div className="text-2xl font-bold text-white">{orders.length}</div>
@@ -443,10 +463,22 @@ export default function OrdersList() {
               <div className="flex gap-3 p-6 border-t border-gray-800">
                 <button
                   onClick={() =>
+                    handleWhatsAppReply(
+                      selectedOrder.phone,
+                      selectedOrder.full_name,
+                    )
+                  }
+                  className="flex-1 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-400 transition-colors flex items-center justify-center gap-2"
+                >
+                  <span>💬</span>
+                  الرد عبر واتساب
+                </button>
+                <button
+                  onClick={() =>
                     handleStatusUpdate(selectedOrder.id, "completed")
                   }
                   disabled={updatingStatus === selectedOrder.id}
-                  className="flex-1 py-3 bg-green-500 text-black rounded-lg font-semibold hover:bg-green-400 transition-colors disabled:opacity-50"
+                  className="flex-1 py-3 bg-green-500/20 text-green-500 rounded-lg font-semibold hover:bg-green-500/30 transition-colors disabled:opacity-50"
                 >
                   تم الإنجاز
                 </button>
