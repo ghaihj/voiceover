@@ -92,6 +92,12 @@ export default function OrderPage() {
       setError("الرجاء إدخال رقم الهاتف");
       return;
     }
+
+    if (!formData.phone.startsWith("+")) {
+      setError("الرجاء ادخال رمز الدولة");
+      return;
+    }
+
     if (!formData.category) {
       setError("الرجاء اختيار الفئة");
       return;
@@ -199,7 +205,7 @@ export default function OrderPage() {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    placeholder="05xxxxxxxx"
+                    placeholder="+9xxxxxxxx... مع كتابة رمز الدولة"
                     className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-yellow-500 focus:outline-none text-white"
                   />
                 </div>

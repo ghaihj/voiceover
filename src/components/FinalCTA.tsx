@@ -123,7 +123,7 @@ export const FinalCTA = () => {
                 </div>
                 <div>
                   <div className="text-sm text-gray-500">واتساب</div>
-                  <div className="text-white font-bold">+380544491695</div>
+                  <div className="text-white font-bold">+971544491695</div>
                 </div>
               </div>
               <div className="flex items-center gap-3">

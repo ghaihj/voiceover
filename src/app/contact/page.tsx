@@ -38,6 +38,11 @@ export default function ContactPage() {
       return;
     }
 
+    if (!formData.phone.startsWith("+")) {
+      setError("الرجاء ادخال رمز الدولة");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -110,7 +115,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-400">العنوان</p>
-                      <p className="text-white">دمشق، سوريا</p>
+                      <p className="text-white">الإمارات</p>
                     </div>
                   </div>
 
@@ -120,7 +125,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-400">الهاتف</p>
-                      <p className="text-white">+963 935 923 731</p>
+                      <p className="text-white">+971544491695</p>
                     </div>
                   </div>
 
@@ -130,18 +135,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-400">البريد الإلكتروني</p>
-                      <p className="text-white">info@sawti.com</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-yellow-500/10 rounded-lg flex items-center justify-center">
-                      <span className="text-yellow-500 text-xl">⏰</span>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-400">ساعات العمل</p>
-                      <p className="text-white">السبت - الخميس: 9ص - 6م</p>
-                      <p className="text-gray-500 text-sm">الجمعة: مغلق</p>
+                      <p className="text-white">majd.alekesh@gmail.com</p>
                     </div>
                   </div>
                 </div>
@@ -213,7 +207,7 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="05xxxxxxxx... مع كتابة رمز الدولة"
+                        placeholder="+9xxxxxxxx... مع كتابة رمز الدولة"
                         className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-yellow-500 focus:outline-none text-white"
                       />
                     </div>

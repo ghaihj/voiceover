@@ -154,10 +154,6 @@ export default function ContactMessagesPage() {
     if (cleanPhone.startsWith("0")) {
       cleanPhone = "963" + cleanPhone.substring(1);
     }
-    // إذا كان الرقم لا يحتوي على رمز الدولة
-    if (!cleanPhone.startsWith("963") && !cleanPhone.startsWith("00963")) {
-      cleanPhone = "963" + cleanPhone;
-    }
 
     const message = encodeURIComponent(
       `مرحباً ${name}،\n\nنشكرك على تواصلك مع صوتي! سنقوم بالرد على استفسارك في أقرب وقت.\n\nتحياتنا،\nفريق صوتي`,

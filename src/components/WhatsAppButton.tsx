@@ -23,7 +23,7 @@ export const WhatsAppButton = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  const phoneNumber = "0544491695";
+  const phoneNumber = "+971544491695";
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
     "مرحباً، أود الاستفسار عن خدمات التعليق الصوتي",
   )}`;
