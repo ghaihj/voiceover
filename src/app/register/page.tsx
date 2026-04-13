@@ -20,6 +20,7 @@ export default function RegisterPage() {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -38,6 +39,12 @@ export default function RegisterPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.phone.startsWith("+")) {
+      setError("الرجاء ادخال رمز الدولة");
+      return;
+    }
+
     register(formData);
   };
 
@@ -121,7 +128,7 @@ export default function RegisterPage() {
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-yellow-500 focus:outline-none transition-colors text-white"
-                      placeholder="09xxxxxxxx"
+                      placeholder="+9xxxxxxxx... مع كتابة رمز الدولة"
                     />
                   </div>
                 </div>
@@ -181,6 +188,11 @@ export default function RegisterPage() {
               </form>
             </div>
 
+            {error && (
+              <div className="bg-red-500/20 border border-red-500 rounded-lg p-4">
+                <p className="text-red-500 text-sm">{error}</p>
+              </div>
+            )}
             {/* بطاقات معلومات */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
               <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 text-center border border-gray-800">
