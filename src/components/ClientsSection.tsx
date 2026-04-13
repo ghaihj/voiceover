@@ -77,6 +77,60 @@ const clients: Client[] = [
     logo: "/logos/Abu-Dhabi-Islamic-Bank-(ADIB).svg",
     alt: "Abu Dhabi Islamic Bank",
   },
+  {
+    id: 12,
+    name: "TAKAT",
+    logo: "/logos/images.png",
+    alt: "Takat",
+  },
+  {
+    id: 13,
+    name: "McDonald's",
+    logo: "/logos/McDonalds.svg",
+    alt: "McDonald's",
+  },
+  {
+    id: 14,
+    name: "Government of Dubai",
+    logo: "/logos/Government of Dubai.png",
+    alt: "Government of Dubai",
+  },
+  {
+    id: 15,
+    name: "دائرة-حكومة-دبي-الذكية",
+    logo: "/logos/دائرة-حكومة-دبي-الذكية.webp",
+    alt: "دائرة-حكومة-دبي-الذكية",
+  },
+  {
+    id: 16,
+    name: "Burger_King",
+    logo: "/logos/Burger_King_logo_(1999–2020).svg.png",
+    alt: "Burger_King",
+  },
+  {
+    id: 17,
+    name: "ETISALAT",
+    logo: "/logos/ET_Logo.png",
+    alt: "ETISALAT",
+  },
+  {
+    id: 18,
+    name: "Lulu Exchange",
+    logo: "/logos/Lulu Exchange.png",
+    alt: "Lulu Exchange",
+  },
+  {
+    id: 19,
+    name: "Sharjah Radio",
+    logo: "/logos/Sharjah Radio.jfif",
+    alt: "Sharjah Radio",
+  },
+  {
+    id: 20,
+    name: "Al Ain Water",
+    logo: "/logos/Al Ain Water.jfif",
+    alt: "Al Ain Water",
+  },
 ];
 
 export const ClientsSection = () => {
