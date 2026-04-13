@@ -1,7 +1,7 @@
 // app/login/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Waveform } from "@/components/Waveform";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     email: "",
@@ -17,27 +19,77 @@ export default function LoginPage() {
   });
 
   const router = useRouter();
-
   const { login, user } = useAuth();
 
-  if (user) {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
 
-  const handelChange = (
+  const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
     const { name, value } = e.target;
-
     setForm((prev) => ({ ...prev, [name]: value }));
+    // مسح الخطأ عند تغيير الحقول
+    if (error) setError(null);
   };
 
-  const handelSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    login(form);
+    // التحقق من البريد الإلكتروني
+    if (!form.email) {
+      setError("الرجاء إدخال البريد الإلكتروني");
+      return;
+    }
+
+    // التحقق من صحة البريد الإلكتروني
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      setError("البريد الإلكتروني غير صحيح");
+      return;
+    }
+
+    // التحقق من كلمة المرور
+    if (!form.password) {
+      setError("الرجاء إدخال كلمة المرور");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      setError("كلمة المرور يجب أن تكون 6 أحرف على الأقل");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await login(form);
+    } catch (err: any) {
+      // معالجة أخطاء تسجيل الدخول
+      if (
+        err.message?.includes("email") ||
+        err.message?.includes("not found")
+      ) {
+        setError("البريد الإلكتروني غير مسجل. يرجى إنشاء حساب أولاً");
+      } else if (
+        err.message?.includes("password") ||
+        err.message?.includes("incorrect")
+      ) {
+        setError("كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى");
+      } else if (err.message?.includes("credentials")) {
+        setError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+      } else {
+        setError(err.message || "حدث خطأ في تسجيل الدخول");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -92,7 +144,7 @@ export default function LoginPage() {
             {/* بطاقة تسجيل الدخول */}
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-gray-800 p-8 shadow-2xl">
               {/* نموذج تسجيل الدخول */}
-              <form onSubmit={handelSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* البريد الإلكتروني */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -104,7 +156,7 @@ export default function LoginPage() {
                       type="email"
                       name="email"
                       value={form.email}
-                      onChange={handelChange}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-yellow-500 focus:outline-none transition-colors text-white pr-12"
                       placeholder="example@domain.com"
                     />
@@ -125,7 +177,7 @@ export default function LoginPage() {
                       id="password"
                       name="password"
                       value={form.password}
-                      onChange={handelChange}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-yellow-500 focus:outline-none transition-colors text-white pr-12"
                       placeholder="********"
                     />
@@ -140,18 +192,33 @@ export default function LoginPage() {
                       {showPassword ? "👁️" : "👁️‍🗨️"}
                     </button>
                   </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    كلمة المرور يجب أن تكون 6 أحرف على الأقل
+                  </p>
                 </div>
+
+                {/* رسالة الخطأ */}
+                {error && (
+                  <div className="bg-red-500/20 border border-red-500 rounded-lg p-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-red-500 text-lg">⚠️</span>
+                      <p className="text-red-500 text-sm">{error}</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* زر تسجيل الدخول */}
                 <button
                   type="submit"
+                  disabled={loading}
                   className="w-full py-4 px-6 rounded-lg font-semibold text-lg
                   bg-gradient-to-r from-yellow-500 to-white text-black
                   hover:from-yellow-400 hover:to-gray-100
                   transition-all transform hover:scale-105
-                  shadow-lg shadow-yellow-500/20"
+                  shadow-lg shadow-yellow-500/20
+                  disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  تسجيل الدخول
+                  {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
                 </button>
 
                 {/* خط فاصل */}
@@ -205,6 +272,19 @@ export default function LoginPage() {
                 <div className="text-yellow-500 text-2xl mb-2">⚡</div>
                 <div className="text-xs text-gray-500">طلبات سريعة</div>
               </div>
+            </div>
+
+            {/* زر تجريبي (اختياري) */}
+            <div className="mt-8 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setForm({ email: "demo@example.com", password: "123456" });
+                }}
+                className="text-sm text-gray-500 hover:text-yellow-500 transition-colors"
+              >
+                تجربة حساب تجريبي
+              </button>
             </div>
           </div>
         </main>

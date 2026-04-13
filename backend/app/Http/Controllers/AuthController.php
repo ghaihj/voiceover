@@ -35,6 +35,7 @@ class AuthController extends Controller
         $user = User::query()->where('email', $request->email)->first();
 
         if (!Auth::attempt($validate)) {
+
             throw ValidationException::withMessages(['Wrong informations']);
         }
 

@@ -21,6 +21,7 @@ export default function RegisterPage() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -35,17 +36,57 @@ export default function RegisterPage() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // مسح الخطأ عند تغيير الحقول
+    if (error) setError(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // التحقق من وجود رمز الدولة
     if (!formData.phone.startsWith("+")) {
-      setError("الرجاء ادخال رمز الدولة");
+      setError("الرجاء ادخال رمز الدولة (مثال: +963xxxxxxxx)");
       return;
     }
 
-    register(formData);
+    // التحقق من طول رقم الهاتف
+    if (formData.phone.length < 10) {
+      setError("رقم الهاتف غير صحيح");
+      return;
+    }
+
+    // التحقق من صحة البريد الإلكتروني
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("البريد الإلكتروني غير صحيح");
+      return;
+    }
+
+    // التحقق من قوة كلمة المرور
+    if (formData.password.length < 6) {
+      setError("كلمة المرور يجب أن تكون 6 أحرف على الأقل");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await register(formData);
+    } catch (err: any) {
+      // معالجة الخطأ من الـ API
+      if (err.message?.includes("email") || err.message?.includes("already")) {
+        setError(
+          "البريد الإلكتروني مستخدم بالفعل. يرجى استخدام بريد إلكتروني آخر",
+        );
+      } else if (err.message?.includes("phone")) {
+        setError("رقم الهاتف مستخدم بالفعل");
+      } else {
+        setError(err.message || "حدث خطأ في إنشاء الحساب");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -128,8 +169,11 @@ export default function RegisterPage() {
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-yellow-500 focus:outline-none transition-colors text-white"
-                      placeholder="+9xxxxxxxx... مع كتابة رمز الدولة"
+                      placeholder="+963xxxxxxxx (مع رمز الدولة)"
                     />
+                    <p className="text-xs text-gray-500 mt-1">
+                      مثال: +963912345678 (رمز الدولة + الرقم)
+                    </p>
                   </div>
                 </div>
 
@@ -173,26 +217,36 @@ export default function RegisterPage() {
                         {showPassword ? "👁️" : "👁️‍🗨️"}
                       </button>
                     </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      كلمة المرور يجب أن تكون 6 أحرف على الأقل
+                    </p>
                   </div>
                 </div>
+
+                {/* رسالة الخطأ */}
+                {error && (
+                  <div className="bg-red-500/20 border border-red-500 rounded-lg p-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-red-500 text-lg">⚠️</span>
+                      <p className="text-red-500 text-sm">{error}</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* زر الإرسال */}
                 <button
                   type="submit"
+                  disabled={loading}
                   className="w-full py-4 px-6 rounded-lg font-semibold text-lg
                   transition-all transform hover:scale-105
-                  bg-gradient-to-r from-yellow-500 to-white text-black hover:from-yellow-400 hover:to-gray-100"
+                  bg-gradient-to-r from-yellow-500 to-white text-black hover:from-yellow-400 hover:to-gray-100
+                  disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  انشاء حساب
+                  {loading ? "جاري إنشاء الحساب..." : "انشاء حساب"}
                 </button>
               </form>
             </div>
 
-            {error && (
-              <div className="bg-red-500/20 border border-red-500 rounded-lg p-4">
-                <p className="text-red-500 text-sm">{error}</p>
-              </div>
-            )}
             {/* بطاقات معلومات */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
               <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 text-center border border-gray-800">
@@ -209,7 +263,7 @@ export default function RegisterPage() {
               </div>
               <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 text-center border border-gray-800">
                 <div className="text-yellow-500 text-3xl mb-3">🔄</div>
-                <h3 className="text-white font-bold mb-2">تعديلات </h3>
+                <h3 className="text-white font-bold mb-2">تعديلات</h3>
                 <p className="text-gray-400 text-sm">حتى ترضى تماماً</p>
               </div>
             </div>
