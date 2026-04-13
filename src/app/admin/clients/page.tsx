@@ -398,31 +398,17 @@ export default function ClientsPage() {
                 </div>
                 <div>
                   <label className="text-sm text-gray-500">رقم الهاتف</label>
-                  <p className="text-white font-medium mt-1 dir-ltr text-left">
+                  <p className="text-white font-medium mt-1 dir-ltr">
                     {formatPhoneNumber(selectedClient.phone)}
                   </p>
                   {selectedClient.phone && (
                     <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => {
-                          window.location.href = `tel:${selectedClient.phone}`;
-                        }}
-                        className="px-3 py-1 bg-green-500/20 text-green-500 rounded-lg text-xs hover:bg-green-500/30 transition-colors"
-                      >
-                        اتصال
-                      </button>
-                      <button
-                        onClick={() => {
                           let cleanPhone = selectedClient.phone.replace(
                             /[^0-9]/g,
                             "",
                           );
-                          if (cleanPhone.startsWith("0")) {
-                            cleanPhone = "963" + cleanPhone.substring(1);
-                          }
-                          if (!cleanPhone.startsWith("963")) {
-                            cleanPhone = "963" + cleanPhone;
-                          }
                           window.open(`https://wa.me/${cleanPhone}`, "_blank");
                         }}
                         className="px-3 py-1 bg-green-500/20 text-green-500 rounded-lg text-xs hover:bg-green-500/30 transition-colors"
@@ -537,12 +523,6 @@ export default function ClientsPage() {
                   <button
                     onClick={() => {
                       let cleanPhone = selectedPhone.replace(/[^0-9]/g, "");
-                      if (cleanPhone.startsWith("0")) {
-                        cleanPhone = "963" + cleanPhone.substring(1);
-                      }
-                      if (!cleanPhone.startsWith("963")) {
-                        cleanPhone = "963" + cleanPhone;
-                      }
                       window.open(`https://wa.me/${cleanPhone}`, "_blank");
                     }}
                     className="flex-1 py-3 bg-green-500/20 text-green-500 rounded-lg font-semibold hover:bg-green-500/30 transition-colors flex items-center justify-center gap-2"

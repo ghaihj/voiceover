@@ -431,7 +431,7 @@ export default function ContactMessagesPage() {
                 </div>
                 <div>
                   <label className="text-sm text-gray-500">رقم الهاتف</label>
-                  <p className="text-white font-medium mt-1 dir-ltr text-left">
+                  <p className="text-white font-medium mt-1 dir-ltr">
                     {selectedMessage.phone || "غير موجود"}
                   </p>
                 </div>
